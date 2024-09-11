@@ -1,0 +1,21 @@
+services:
+  mongodb:
+    image: 'mongo:latest'
+    environment:
+      - 'MONGODB_USERNAME=user'
+      - 'MONGODB_PASSWORD=psswd'
+      - 'MONGODB_DATABASE=productsdb'
+    ports:
+      - '27017:27017'
+  
+  mongo-express:
+    image: mongo-express:latest
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_BASICAUTH_USERNAME=user
+      - ME_CONFIG_BASICAUTH_PASSWORD=psswd
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
