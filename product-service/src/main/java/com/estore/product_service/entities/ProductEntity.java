@@ -18,8 +18,5 @@ public class ProductEntity {
 	public String prod_name;
 	public String price;
 	public String sku_code;
-	// public String Images;
 	public String Description;
-	// public String created_at;
-	// public String updated_at;
 }

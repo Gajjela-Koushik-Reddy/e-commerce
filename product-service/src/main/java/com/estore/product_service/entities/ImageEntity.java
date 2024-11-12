@@ -18,7 +18,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "imageData")
+@Table(name = "ProductImageData")
 @NoArgsConstructor
 public class ImageEntity {
 

@@ -1,6 +1,7 @@
 package com.estore.product_service.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,10 +29,15 @@ public class ImageController {
     private ImageServiceImpl imageServiceImpl;
 
     @PostMapping
-    public ResponseEntity<String> postMethodName(@RequestParam("image") MultipartFile file) throws IOException {
+    public String postMethodName(@RequestParam("images") List<MultipartFile> files) throws IOException {
 
-        String response = imageServiceImpl.uploadImage(file);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        ArrayList<String> file_names = new ArrayList<>();
+        for (MultipartFile file : files) {
+            imageServiceImpl.uploadImage(file);
+            file_names.add(file.getOriginalFilename());
+        }
+
+        return file_names.toString();
     }
 
     @GetMapping("/{id}")

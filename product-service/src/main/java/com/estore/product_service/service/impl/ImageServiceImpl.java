@@ -24,6 +24,8 @@ public class ImageServiceImpl {
         imageEntity.setProductId("1234");
         imageEntity.setImageData(file.getBytes());
 
+        System.out.println(file.getContentType());
+
         imageRepository.save(imageEntity);
 
         return new String(file.getOriginalFilename() + "has been uploaded successfully");
