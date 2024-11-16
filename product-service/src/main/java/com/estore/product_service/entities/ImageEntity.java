@@ -29,6 +29,7 @@ public class ImageEntity {
         @Column(nullable = false)
         private String productId;
 
+        @Column(nullable = false)
         private String imageName;
 
         @Lob
