@@ -1,7 +1,6 @@
 package com.estore.product_service.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
 @RestController
 @RequestMapping(path = "/image")
 public class ImageController {
@@ -29,15 +31,11 @@ public class ImageController {
     private ImageServiceImpl imageServiceImpl;
 
     @PostMapping
-    public String postMethodName(@RequestParam("images") List<MultipartFile> files) throws IOException {
+    public String uploadImages(@RequestParam("images") MultipartFile[] files) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
 
-        ArrayList<String> file_names = new ArrayList<>();
-        for (MultipartFile file : files) {
-            imageServiceImpl.uploadImage(file);
-            file_names.add(file.getOriginalFilename());
-        }
+        String ret = imageServiceImpl.uploadImages(files);
 
-        return file_names.toString();
+        return ret;
     }
 
     @GetMapping("/{id}")
