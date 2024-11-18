@@ -19,19 +19,19 @@ import lombok.Setter;
 @Setter
 public class ProductEntity {
     @Id
-    public String productId;
+    private String productId;
 
 	@NonNull
-	public String categoryId;
+	private String categoryId;
 
 	@NonNull
-	public String name;
+	private String name;
 
-	public String price;
+	private String price;
 
-	public String description;
+	private String description;
 
-	public String shortDescription;
+	private String shortDescription;
 
 	private List<String> imageUrls;
 
