@@ -12,6 +12,7 @@ import com.estore.product_service.repository.ImageRepository;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,26 +51,30 @@ public class ImageServiceImpl {
         return new String(file.getOriginalFilename() + "has been uploaded successfully");
     }
 
-    public void uploadFilesToMinio(MultipartFile[] files)
+    public List<String> uploadFilesToMinio(MultipartFile[] files)
             throws IOException, InvalidKeyException, NoSuchAlgorithmException {
 
         MinioClient minioClient = minioConfig.minioClient();
+        List<String> imageuuids = new ArrayList<>();
 
         try {
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
             if (!found) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
-            } else {
-                // bucket exists
-                // upload all the files
-                List<SnowballObject> objects = new ArrayList<>();
-                for (MultipartFile image : files) {
-                    objects.add(new SnowballObject(image.getOriginalFilename(),
-                            new ByteArrayInputStream(image.getBytes()), image.getSize(), null));
-                }
-                minioClient.uploadSnowballObjects(
-                        UploadSnowballObjectsArgs.builder().bucket(bucket).objects(objects).build());
             }
+            // bucket exists
+            // upload all the files
+            List<SnowballObject> objects = new ArrayList<>();
+            for (MultipartFile image : files) {
+                String filename = UUID.randomUUID() + image.getOriginalFilename();
+                imageuuids.add(filename);
+                objects.add(new SnowballObject(filename,
+                        new ByteArrayInputStream(image.getBytes()), image.getSize(), null));
+            }
+            minioClient.uploadSnowballObjects(
+                    UploadSnowballObjectsArgs.builder().bucket(bucket).objects(objects).build());
+
+            return imageuuids;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
