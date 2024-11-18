@@ -80,10 +80,10 @@ public class ImageServiceImpl {
 
     }
 
-    public String uploadImages(MultipartFile[] images)
+    public List<String> uploadImages(MultipartFile[] images)
             throws IOException, InvalidKeyException, NoSuchAlgorithmException {
 
-        return uploadFilesToMinio(images).toString();
+        return uploadFilesToMinio(images);
     }
 
     public byte[] downloadImage(String imageuuid) {
