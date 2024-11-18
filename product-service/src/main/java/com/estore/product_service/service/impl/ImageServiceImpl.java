@@ -11,14 +11,14 @@ import com.estore.product_service.repository.ImageRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Optional;
+import java.io.InputStream;
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.minio.BucketExistsArgs;
+import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
 import io.minio.SnowballObject;
 import io.minio.UploadSnowballObjectsArgs;
 
@@ -54,13 +54,12 @@ public class ImageServiceImpl {
     public List<String> uploadFilesToMinio(MultipartFile[] files)
             throws IOException, InvalidKeyException, NoSuchAlgorithmException {
 
-        MinioClient minioClient = minioConfig.minioClient();
         List<String> imageuuids = new ArrayList<>();
 
         try {
-            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
+            boolean found = minioConfig.minioClient().bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
             if (!found) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
+                minioConfig.minioClient().makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
             }
             // bucket exists
             // upload all the files
@@ -71,7 +70,7 @@ public class ImageServiceImpl {
                 objects.add(new SnowballObject(filename,
                         new ByteArrayInputStream(image.getBytes()), image.getSize(), null));
             }
-            minioClient.uploadSnowballObjects(
+            minioConfig.minioClient().uploadSnowballObjects(
                     UploadSnowballObjectsArgs.builder().bucket(bucket).objects(objects).build());
 
             return imageuuids;
@@ -83,17 +82,18 @@ public class ImageServiceImpl {
 
     public String uploadImages(MultipartFile[] images)
             throws IOException, InvalidKeyException, NoSuchAlgorithmException {
-        uploadFilesToMinio(images);
-        return "NotImplementedYet";
+
+        return uploadFilesToMinio(images).toString();
     }
 
-    public byte[] downloadImage(String imageId) {
-        Optional<ImageEntity> imageEntity = imageRepository.findById(imageId);
-        return imageEntity.get().getImageData();
-    }
-
-    public List<ImageEntity> getAllProductImages(String productId) {
-        return imageRepository.findByProductId(productId);
+    public byte[] downloadImage(String imageuuid) {
+        try {
+            InputStream stream = minioConfig.minioClient()
+                    .getObject(GetObjectArgs.builder().bucket(bucket).object(imageuuid).build());
+            return stream.readAllBytes();
+        } catch (Exception e) {
+            throw new RuntimeException("Image cannot be downloaded" + e.getMessage());
+        }
     }
 
 }
