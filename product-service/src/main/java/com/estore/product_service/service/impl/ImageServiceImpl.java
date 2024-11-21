@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.estore.product_service.config.MinioConfig;
-import com.estore.product_service.entities.ImageEntity;
-import com.estore.product_service.repository.ImageRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -29,27 +27,10 @@ import java.security.NoSuchAlgorithmException;
 public class ImageServiceImpl {
 
     @Autowired
-    private ImageRepository imageRepository;
-
-    @Autowired
     private MinioConfig minioConfig;
 
     @Value("${minio.bucket}")
     private String bucket;
-
-    public String uploadImage(MultipartFile file) throws IOException {
-
-        ImageEntity imageEntity = new ImageEntity();
-        imageEntity.setImageName(file.getName());
-        imageEntity.setProductId("1234");
-        imageEntity.setImageData(file.getBytes());
-
-        System.out.println(file.getContentType());
-
-        imageRepository.save(imageEntity);
-
-        return new String(file.getOriginalFilename() + "has been uploaded successfully");
-    }
 
     public List<String> uploadFilesToMinio(MultipartFile[] files)
             throws IOException, InvalidKeyException, NoSuchAlgorithmException {
@@ -77,7 +58,6 @@ public class ImageServiceImpl {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
-
     }
 
     public List<String> uploadImages(MultipartFile[] images)
