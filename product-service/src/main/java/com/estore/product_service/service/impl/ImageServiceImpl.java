@@ -35,6 +35,11 @@ public class ImageServiceImpl {
     public List<String> uploadFilesToMinio(MultipartFile[] files)
             throws IOException, InvalidKeyException, NoSuchAlgorithmException {
 
+        if (files == null)
+            throw new NullPointerException("files cannot be null");
+        if (files.length == 0)
+            throw new RuntimeException("Cannot Upload Empty Files");
+
         List<String> imageuuids = new ArrayList<>();
 
         try {
@@ -46,6 +51,8 @@ public class ImageServiceImpl {
             // upload all the files
             List<SnowballObject> objects = new ArrayList<>();
             for (MultipartFile image : files) {
+                if (image.getContentType().isEmpty() || !image.getContentType().startsWith("image/"))
+                    throw new RuntimeException("not an valid image file");
                 String filename = UUID.randomUUID() + image.getOriginalFilename();
                 imageuuids.add(filename);
                 objects.add(new SnowballObject(filename,
