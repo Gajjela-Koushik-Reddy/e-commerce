@@ -32,7 +32,7 @@ public class ProductEntity {
 	private String price;
 
 	@Min(value = 0, message = "Stock Quantity Cannot be negative")
-	private int stockQuantity;
+	private Integer stockQuantity;
 
 	private boolean inStock;
 
