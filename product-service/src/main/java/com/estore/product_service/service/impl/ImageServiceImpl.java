@@ -32,7 +32,7 @@ public class ImageServiceImpl {
     @Value("${minio.bucket}")
     private String bucket;
 
-    public List<String> uploadFilesToMinio(MultipartFile[] files)
+    private List<String> uploadFilesToMinio(MultipartFile[] files)
             throws IOException, InvalidKeyException, NoSuchAlgorithmException {
 
         if (files == null)
