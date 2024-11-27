@@ -34,20 +34,23 @@ public class ProductServiceImpl {
             String price,
             String description,
             String shortDescription,
+            Integer stockQuantity,
             MultipartFile[] images)
             throws IOException, InvalidKeyException, NoSuchAlgorithmException {
 
         // Validate inputs
-        if(catrgoryId.isEmpty() || catrgoryId == null)
+        if(catrgoryId == null || catrgoryId.isEmpty())
                 throw new InvalidParameterException("Category Id cannot be empty or null");
-        if(productName.isEmpty() || productName == null)
+        if(productName == null || productName.isEmpty())
                 throw new InvalidParameterException("product name cannot be empty or null");
-        if(price.isEmpty() || price == null)
+        if(price == null || price.isEmpty())
                 throw new InvalidParameterException("price cannot be empty or null");
-        if(description.isEmpty() || description == null)
+        if(description == null || description.isEmpty())
                 throw new InvalidParameterException("description cannot be empty");
-        if(shortDescription.isEmpty() || shortDescription == null)
-                throw new InvalidParameterException("short descriptiion cannot be empty");
+        if(shortDescription == null || shortDescription.isEmpty())
+                throw new InvalidParameterException("short description cannot be empty");
+        if(stockQuantity == null || stockQuantity.intValue() <= 0)
+                throw new InvalidParameterException("stock quantity cannot be less than 0");
 
         ProductEntity newProduct = new ProductEntity();
 
@@ -57,6 +60,8 @@ public class ProductServiceImpl {
         newProduct.setPrice(price);
         newProduct.setDescription(description);
         newProduct.setShortDescription(shortDescription);
+        newProduct.setStockQuantity(stockQuantity);
+        newProduct.setInStock(true);
         newProduct.setCreatedAt(ZonedDateTime.now(ZoneId.of("UTC")));
 
         try {
