@@ -1,14 +1,14 @@
 package com.estore.product_service.entities;
 
 import java.util.List;
-import java.util.Set;
 import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mongodb.lang.NonNull;
 
-import jakarta.persistence.Version;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,63 +21,27 @@ import lombok.Setter;
 @Setter
 public class ProductEntity {
     @Id
-    public String productId;
+    private String productId;
 
 	@NonNull
-	public String categoryId;
+	private String categoryId;
 
 	@NonNull
-	public String name;
+	private String name;
 
-	public String price;
+	private String price;
 
-	public String discountedPrice;
-
-	public String skuCode;
-
-	public String upcCode;
-
-	public String description;
-
-	public String shortDescription;
-
-	private String brand;
-
+	@Min(value = 0, message = "Stock Quantity Cannot be negative")
 	private Integer stockQuantity;
 
-	private Integer lowStockThreshold;
+	private boolean inStock;
 
-	private Boolean isActive;
+	private String description;
 
-	private ProductStatus status;
-
-	private Set<String> tags;
+	private String shortDescription;
 
 	private List<String> imageUrls;
 
-	// Physical attributes
-    private Double weight; // in kg
-    private Double length; // in cm
-    private Double width;  // in cm
-    private Double height; // in cm
-
-	// SEO fields
-    private String metaTitle;
-    private String metaDescription;
-    private String metaKeywords;
-
 	private LocalDateTime createdAt;
 	private LocalDateTime lastModifiedAt;
-
-	@Version
-	private Long version;
-
-	// Enum for product status
-    public enum ProductStatus {
-        DRAFT,
-        ACTIVE,
-        INACTIVE,
-        OUT_OF_STOCK,
-        DISCONTINUED
-    }
 }
