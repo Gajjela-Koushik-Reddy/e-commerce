@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.management.RuntimeErrorException;
@@ -98,14 +99,11 @@ public class ProductServiceImpl {
 
         public List<ProductSearch> fetchProductByName(String productName) throws IOException {
                 try {
-                        // todo: change the for loop to use java streams
                         SearchResponse<ProductSearch> response = elasticSearchServiceImpl
                                         .matchProductsByName(productName);
-                        List<Hit<ProductSearch>> hits = response.hits().hits();
                         List<ProductSearch> ret = new ArrayList<>();
-                        for (var hit : hits) {
-                                ret.add(hit.source());
-                        }
+
+                        ret = response.hits().hits().stream().map(s -> s.source()).collect(Collectors.toList());
 
                         return ret;
                 } catch (Exception e) {
