@@ -1,7 +1,7 @@
 package com.estore.product_service.entities;
 
 import java.util.List;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -42,6 +42,6 @@ public class ProductEntity {
 
 	private List<String> imageUrls;
 
-	private ZonedDateTime createdAt;
-	private ZonedDateTime lastModifiedAt;
+	private LocalDateTime createdAt;
+	private LocalDateTime lastModifiedAt;
 }
