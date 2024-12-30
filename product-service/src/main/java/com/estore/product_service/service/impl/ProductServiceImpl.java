@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.estore.product_service.dto.ProductDto;
 import com.estore.product_service.entities.ProductEntity;
 import com.estore.product_service.entities.ProductSearch;
 import com.estore.product_service.repository.ProductRepository;
@@ -104,6 +105,32 @@ public class ProductServiceImpl {
                 } catch (Exception e) {
                         throw new RuntimeException("cannot fetch product name");
                 }
+        }
+
+        public ProductDto fetchProductById(String id) {
+
+                ProductDto ret;
+                try {
+                        Optional<ProductEntity> res = productRepository.findById(id);
+                        if (res.isPresent()) {
+                                ProductEntity prod = res.get();
+                                ret = new ProductDto(
+                                                prod.getProductId(),
+                                                prod.getCategoryId(),
+                                                prod.getName(),
+                                                prod.getPrice(),
+                                                prod.getDescription(),
+                                                prod.getShortDescription(),
+                                                prod.getStockQuantity(),
+                                                prod.getImageUrls());
+                        } else {
+                                throw new RuntimeException("Cannot find the product with id: " + id);
+                        }
+                } catch (Exception e) {
+                        throw new RuntimeException("Cannot find the product with id: " + id + e.getMessage());
+                }
+
+                return ret;
         }
 
         public void updateProduct(String productId,
