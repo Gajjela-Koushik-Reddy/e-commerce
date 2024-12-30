@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.estore.product_service.dto.ProductDto;
 import com.estore.product_service.entities.ProductSearch;
 import com.estore.product_service.service.impl.ElasticSearchServiceImpl;
 import com.estore.product_service.service.impl.ProductServiceImpl;
@@ -23,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/product")
@@ -79,5 +81,37 @@ public class ProductController {
         List<ProductSearch> res = productServiceImpl.fetchProductByName(partialProdName);
         return res;
     }
+
+    @PutMapping(value = "/update", consumes = "multipart/form-data")
+    public String updateProduct(
+            @RequestParam("id") String id,
+            @RequestParam("categoryId") String catrgoryId,
+            @RequestParam("productName") String productName,
+            @RequestParam("price") String price,
+            @RequestParam("description") String description,
+            @RequestParam("shortDescription") String shortDescription,
+            @RequestParam("stockQuantity") Integer stockQuantity,
+            @RequestParam("file") MultipartFile[] file) {
+
+        try {
+            productServiceImpl.updateProduct(productName, catrgoryId, productName, price, description, shortDescription,
+                    stockQuantity, file);
+        } catch (Exception e) {
+            throw new RuntimeException("cannot update product" + e.getMessage());
+        }
+
+        return "Upload Successful";
+    }
+
+    @GetMapping("/{id}")
+    public ProductDto getProduct(@PathVariable String id) {
+        try {
+            ProductDto ret = productServiceImpl.fetchProductById(id);
+            return ret;
+        } catch (Exception e) {
+            throw new RuntimeException("can fetch product" + e.getMessage());
+        }
+    }
+    
 
 }
