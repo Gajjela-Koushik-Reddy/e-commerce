@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.estore.product_service.dto.ProductDto;
+import com.estore.product_service.dto.ProductResponseDto;
 import com.estore.product_service.entities.ProductSearch;
 import com.estore.product_service.service.impl.ElasticSearchServiceImpl;
 import com.estore.product_service.service.impl.ProductServiceImpl;
@@ -104,9 +104,9 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductDto getProduct(@PathVariable String id) {
+    public ProductResponseDto getProduct(@PathVariable String id) {
         try {
-            ProductDto ret = productServiceImpl.fetchProductById(id);
+            ProductResponseDto ret = productServiceImpl.fetchProductById(id);
             return ret;
         } catch (Exception e) {
             throw new RuntimeException("can fetch product" + e.getMessage());
