@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.estore.product_service.dto.ProductDto;
+import com.estore.product_service.dto.ProductResponseDto;
 import com.estore.product_service.entities.ProductEntity;
 import com.estore.product_service.entities.ProductSearch;
 import com.estore.product_service.repository.ProductRepository;
@@ -107,21 +107,18 @@ public class ProductServiceImpl {
                 }
         }
 
-        public ProductDto fetchProductById(String id) {
+        public ProductResponseDto fetchProductById(String id) {
 
-                ProductDto ret;
+                ProductResponseDto ret;
                 try {
                         Optional<ProductEntity> res = productRepository.findById(id);
                         if (res.isPresent()) {
                                 ProductEntity prod = res.get();
-                                ret = new ProductDto(
+                                ret = new ProductResponseDto(
                                                 prod.getProductId(),
-                                                prod.getCategoryId(),
                                                 prod.getName(),
                                                 prod.getPrice(),
                                                 prod.getDescription(),
-                                                prod.getShortDescription(),
-                                                prod.getStockQuantity(),
                                                 prod.getImageUrls());
                         } else {
                                 throw new RuntimeException("Cannot find the product with id: " + id);
