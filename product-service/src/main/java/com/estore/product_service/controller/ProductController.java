@@ -2,6 +2,7 @@ package com.estore.product_service.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +38,7 @@ public class ProductController {
     private ElasticSearchServiceImpl elasticSearchServiceImpl;
 
     @PostMapping(value = "/add", consumes = "multipart/form-data")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> addProduct(
             @RequestParam("categoryId") String catrgoryId,
             @RequestParam("productName") String productName,
@@ -68,6 +70,7 @@ public class ProductController {
     }
 
     @GetMapping("/findAllProducts")
+    @ResponseStatus(HttpStatus.OK)
     public String getProducts() throws IOException {
         @SuppressWarnings("rawtypes")
         SearchResponse<Map> res = elasticSearchServiceImpl.matchAllProductsService();
@@ -83,6 +86,7 @@ public class ProductController {
     }
 
     @PutMapping(value = "/update", consumes = "multipart/form-data")
+    @ResponseStatus(HttpStatus.OK)
     public String updateProduct(
             @RequestParam("id") String id,
             @RequestParam("categoryId") String catrgoryId,
@@ -104,6 +108,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ProductResponseDto getProduct(@PathVariable String id) {
         try {
             ProductResponseDto ret = productServiceImpl.fetchProductById(id);

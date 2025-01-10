@@ -43,5 +43,6 @@ public class ProductEntity {
 	private List<String> imageUrls;
 
 	private LocalDateTime createdAt;
+
 	private LocalDateTime lastModifiedAt;
 }
