@@ -130,7 +130,8 @@ public class ProductServiceImpl {
                 return ret;
         }
 
-        public void updateProduct(String productId,
+        public void updateProduct(
+                        String productId,
                         String categoryId,
                         String productName,
                         String price,
@@ -142,7 +143,7 @@ public class ProductServiceImpl {
                 if (productId == null || productId.isEmpty())
                         throw new InvalidParameterException("productId cannot be null or empty");
 
-                Optional<ProductEntity> existingProductOptional = productRepository.findById(categoryId);
+                Optional<ProductEntity> existingProductOptional = productRepository.findById(productId);
 
                 if (existingProductOptional.isEmpty())
                         throw new RuntimeException("Cannot find the product with productid" + productId);
@@ -175,6 +176,7 @@ public class ProductServiceImpl {
                 }
 
                 try {
+                        existingProduct.setLastModifiedAt(LocalDateTime.now());
                         productRepository.save(existingProduct);
                 } catch (Exception e) {
                         throw new RuntimeException("Cannot save product" + e.getMessage());

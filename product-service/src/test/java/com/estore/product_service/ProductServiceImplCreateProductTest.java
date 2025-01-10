@@ -21,14 +21,18 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import com.estore.product_service.entities.ProductEntity;
 import com.estore.product_service.repository.ProductRepository;
+import com.estore.product_service.repository.ProductSearchRepository;
 import com.estore.product_service.service.impl.ImageServiceImpl;
 import com.estore.product_service.service.impl.ProductServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceImplTest {
+public class ProductServiceImplCreateProductTest {
 
     @Mock
     private ProductRepository productRepository;
+
+    @Mock
+    private ProductSearchRepository productSearchRepository;
 
     @Mock
     private ImageServiceImpl imageServiceImpl;
